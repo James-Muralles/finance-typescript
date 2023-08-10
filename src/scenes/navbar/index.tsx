@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Box,Typography, useTheme } from '@mui/material';
-import FlexBetween from '../../components/FlexBetween';
+import FlexBetween from '@/components/FlexBetween';
 import PixIcon from '@mui/icons-material/Pix';
 
 type Props = {
@@ -13,7 +13,7 @@ const Navbar = (props: Props) => {
     const [selectedPage, setSelectedPage] = useState("dashboard")
   return (
     <FlexBetween mb="0.25rem" p=".5rem 0rem" color={palette.grey[300]}>
-        
+
         {/* LEFT SIDE */}
         <FlexBetween gap=".75rem">
             <PixIcon sx={{fontSize: "23px"}}/>

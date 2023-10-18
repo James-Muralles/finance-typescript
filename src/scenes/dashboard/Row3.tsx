@@ -10,9 +10,30 @@ import { DataGrid, GridCellParams } from '@mui/x-data-grid';
 
 const Row3 = () => {
   const {palette} = useTheme();
+  const pieColors = [palette.primary[800], palette.primary[500]]
   const {data: productData} = useGetProductsQuery();
   const {data: kpiData} = useGetKpisQuery();
   const {data: transactionData} = useGetTransactionsQuery();
+
+  const pieChartData= useMemo(() => {
+    if (kpiData){
+      const totalExpenses = kpiData[0].totalExpenses;
+      return Object.entries(kpiData[0].expensesByCategory).map(
+        ([key, value]) => {
+          return [
+            {
+              name:key,
+              value:value,
+            },
+            {
+              name:`${key} of Total`,
+            value: totalExpenses - value
+            }
+          ]
+        }
+      )
+    }
+  },[kpiData]);
 
   const productColumns = [
     {
@@ -122,8 +143,45 @@ const Row3 = () => {
        </Box>
 
     </DashboardBox>
-    <DashboardBox gridArea="i"></DashboardBox>
-    <DashboardBox gridArea="j"></DashboardBox>
+    <DashboardBox gridArea="i">
+    <BoxHeader title="Expense Breakdown by Category" sideText="+4%"/>
+    <FlexBetween mt=".5rem" gap=".5rem" p="0 1 rem" textAlign="center">
+      {pieChartData?.map((data, i) => (
+        <Box key={`${data[0].name} -${i}`}>
+        <PieChart width={110} height={100}>
+          <Pie
+            stroke="none"
+            data={data}
+            innerRadius={18}
+            outerRadius={35}
+            paddingAngle={2}
+            dataKey="value"
+            >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={pieColors[index]} />
+              ))}
+            </Pie>
+          </PieChart>
+          <Typography variant="h5">{data[0].name}</Typography>
+        </Box>
+
+        
+
+      ))}
+    </FlexBetween>
+
+    
+    </DashboardBox>
+    <DashboardBox gridArea="j">
+
+    <BoxHeader title="Overall Summary and Explanation Data" sideText="+15%"/>
+    <Box height="15px" margin="1.25rem 1 rem .4rem 1rem" bgcolor={palette.primary[800]} borderRadius={"1rem"}>
+      <Box height="15px" bgcolor={palette.primary[600]} borderRadius={"1rem"} width="40%"></Box>
+      <Typography margin="0 1rem" variant="h6">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Typography>
+    </Box>
+
+
+    </DashboardBox>
     </>
   )
 }

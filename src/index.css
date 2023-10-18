@@ -9,7 +9,7 @@ body,
   font-family: "Inter", sans-serif;
   background-color: #1f2026;
 }
-
+/* edit scroll bar */
 ::-webkit-scrollbar {
   width: 10px;
 }
